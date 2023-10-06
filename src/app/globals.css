@@ -25,3 +25,13 @@ body {
     )
     rgb(var(--background-start-rgb));
 }
+
+.items-list {
+  width: 60%;
+}
+
+.product-headers, .products-summary {
+    display: flex;
+    justify-content: space-evenly;
+    text-align: center;
+}
