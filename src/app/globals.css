@@ -16,22 +16,40 @@
   }
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.header-logo {
+  height: 120px;
+  width: 120px;
+}
+
+.header-logo-name {
+  position: absolute;
+  top: 31%;
+  left: 15%;
+  font-weight: bold;
 }
 
 .items-list {
-  width: 60%;
+  border: 1px solid;
+  border-radius: 12px;
+  width: 100%;
 }
 
 .product-headers, .products-summary {
     display: flex;
     justify-content: space-evenly;
     text-align: center;
+}
+
+.form-section {
+ width: 100%;
+}
+
+form {
+  display: flex;
+  justify-content: space-around;
+}
+
+.add-product-section {
+  display: flex;
+  justify-content: center;
 }

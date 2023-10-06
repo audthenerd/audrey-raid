@@ -7,6 +7,9 @@ export default function Home() {
   const [ productQty, setQuantity] = useState(null)
   const [price, setPrice] = useState(null)
   const [itemsList, setList] = useState([])
+  const [finalTotalPrice, setFinalPrice] = useState(0)
+  console.log('final', finalTotalPrice)
+
   useEffect(() => {
     fetch('/api/get-products')
       .then((res) => res.json())
@@ -26,19 +29,36 @@ export default function Home() {
   const handleQuantityData = (e) => {
     setQuantity(e.target.value)
   }
-  const addItem = (e) => {
-    const totalPrice = (Number(price) * Number(productQty)).toFixed(2)
-    console.log('totalPrice', totalPrice)
-    const list = {'name': productName, 'quantity': productQty, 'price': totalPrice}
-    console.log('list', list)
-    setList((itemsList) => [
+  const clearInputFields = () => {
+    const nameInput = document.getElementById('name-input')
+    const quantityInput = document.getElementById('quantity-input')
+    nameInput.value = ''
+    quantityInput.value = ''
+    setProductName(null)
+    setQuantity(null)
+    setPrice(null)
+  }
+  const addItem = async (e) => {
+    const itemTotalPrice = (Number(price) * Number(productQty)).toFixed(2)
+    await setFinalPrice((Number(finalTotalPrice) + Number(itemTotalPrice)).toFixed(2))
+
+    const list = {'name': productName, 'quantity': productQty, 'price': itemTotalPrice}
+    await setList((itemsList) => [
       ...itemsList,
       list
     ])
+
+    clearInputFields()
   }
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <div className="header">Point-of-Sale</div>
+    <main className="flex min-h-screen flex-col justify-between p-24">
+      <div className="header">
+        <div className="header-logo-group">
+          <img className="header-logo" src="./fresh-veg-logo.jpeg" />
+          <div className="header-logo-name">aud's supermart</div>
+        </div>
+        <div className="header-text">Point-of-Sale</div>
+      </div>
       <div className="items-list">
         <div className="product-headers">
           <div>Product Name</div>
@@ -56,16 +76,26 @@ export default function Home() {
             )
           })
         }
+        <div className="total">
+          <div className="header">Total</div>
+          <div className="final-price">{finalTotalPrice}</div>
+        </div>
       </div>
-      <form>
-        <label htmlFor="product" className="product-name">Product</label>
-        <input className="text-gray-700 text-sm font-bold mb-2" type="text" name="product" onBlur={handleNameData} required />
-        <label htmlFor="name" className="quantity">Quantity</label>
-        <input type="number" name="quantity" required onBlur={handleQuantityData} />
-        <div className="price">{price}</div>
-        <button onClick={addItem} type="button">Add</button>
-        <button className="block" type="submit">Submit</button>
-      </form>
+      <div className="form-section">
+        <form>
+          <div className="add-product-section">
+            <label htmlFor="product" className="product-name">Product</label>
+            <input id="name-input" className="text-gray-700 text-sm font-bold mb-2" type="text" name="product" onBlur={handleNameData} required />
+            <label htmlFor="name" className="quantity">Quantity</label>
+            <input id="quantity-input" type="number" name="quantity" required onBlur={handleQuantityData} />
+            <div className="price">{price}</div>
+            <button onClick={addItem} type="button" >Add</button>
+          </div>
+          <div className="closing-section">
+            <button className="block" type="submit">Submit</button>
+          </div>
+        </form>
+      </div>
     </main>
   )
 }
