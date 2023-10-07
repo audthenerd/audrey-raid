@@ -1,14 +1,16 @@
 'use client'
 import { useState, useEffect } from 'react'
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select, { SelectChangeEvent } from '@mui/material/Select'
 
 export default function Home() {
-  const [data, setData] = useState(null)
-  const [productName, setProductName] = useState(null)
+  const [productData, setData] = useState(null)
+  const [productName, setProductName] = useState('Select product')
   const [ productQty, setQuantity] = useState(null)
   const [price, setPrice] = useState(null)
   const [itemsList, setList] = useState([])
   const [finalTotalPrice, setFinalPrice] = useState(0)
-  console.log('final', finalTotalPrice)
 
   useEffect(() => {
     fetch('/api/get-products')
@@ -17,14 +19,21 @@ export default function Home() {
         setData(data.products.rows)
       })
   }, [])
+
   const handleNameData = (e) => {
     const name = e.target.value
     setProductName(name)
-    data.forEach((item) => {
+    e.target.value !== '' ? autoSetQuantity() : ''
+    productData?.forEach((item) => {
       if(item.name === name) {
         setPrice(item.price)
       }
     })
+  }
+  const autoSetQuantity = () => {
+    const quantityInput = document.getElementById('quantity-input')
+    quantityInput.value = 1
+    setQuantity(1)
   }
   const handleQuantityData = (e) => {
     setQuantity(e.target.value)
@@ -51,11 +60,11 @@ export default function Home() {
     clearInputFields()
   }
   return (
-    <main className="flex min-h-screen flex-col justify-between p-24">
+    <main className="flex min-h-screen flex-col">
       <div className="header">
         <div className="header-logo-group">
           <img className="header-logo" src="./fresh-veg-logo.jpeg" />
-          <div className="header-logo-name">aud's supermart</div>
+          <div className="header-logo-name">auds supermart</div>
         </div>
         <div className="header-text">Point-of-Sale</div>
       </div>
@@ -68,10 +77,10 @@ export default function Home() {
         {
           itemsList.map((item, i) => {
             return (
-              <div className="products-summary">
-                <div className={'item-' + item.name} key={'product-' + i}>{item.name}</div>
-                <div className={'quantity-' + item.name} key={'quanity-' + i}>{item.quantity}</div>
-                <div className={'price-' + item.name} key={'price' + i}>{item.price}</div>
+              <div className="products-summary" key={i}>
+                <div className={'item-' + item.name}>{item.name}</div>
+                <div className={'quantity-' + item.name}>{item.quantity}</div>
+                <div className={'price-' + item.name}>{item.price}</div>
               </div>
             )
           })
@@ -84,8 +93,22 @@ export default function Home() {
       <div className="form-section">
         <form>
           <div className="add-product-section">
-            <label htmlFor="product" className="product-name">Product</label>
-            <input id="name-input" className="text-gray-700 text-sm font-bold mb-2" type="text" name="product" onBlur={handleNameData} required />
+            <InputLabel id="product-input-label">Product</InputLabel>
+            <Select
+              labelId="product-input-label"
+              id="name-input"
+              value={productName}
+              label="Product"
+              onChange={handleNameData}
+            >
+              {
+                productData?.map((product, i) => {
+                  return (
+                    <MenuItem value={product.name} key={i}>{product.name}</MenuItem>
+                  )
+                })
+              }
+            </Select>
             <label htmlFor="name" className="quantity">Quantity</label>
             <input id="quantity-input" type="number" name="quantity" required onBlur={handleQuantityData} />
             <div className="price">{price}</div>
