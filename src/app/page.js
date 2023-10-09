@@ -67,7 +67,7 @@ export default function Home() {
     setStatus()
   }
   return (
-    <main className="flex min-h-screen flex-col">
+    <main className="flex min-h-screen flex-col home">
       <div className="header">
         <div className="header-logo-group">
           <img className="header-logo" src="./fresh-veg-logo.jpeg" />
@@ -124,7 +124,7 @@ export default function Home() {
               <input id="quantity-input" type="number" name="quantity" required onBlur={handleQuantityData} />
             </div>
             <div className="price"><span hidden={!price}>$</span>{price}</div>
-            <button onClick={addItem} type="button" disabled={addButton}>Add</button>
+            <button className="add-to-cart" onClick={addItem} type="button" disabled={addButton}>Add to Cart</button>
           </div>
         </form>
         <hr></hr>

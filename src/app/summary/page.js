@@ -19,7 +19,7 @@ export default function Summary() {
     <main className="flex min-h-screen flex-col">
     <div className="navigation">
       <Link className="nav" href="/">New transaction</Link>
-      <Link className="nav" href="/inventory">Inventory</Link>
+      <Link className="nav" href="/inventory">Check Inventory</Link>
     </div>
       <div className="transaction-summary">
         <div>TRANSACTION COMPLETE!</div>
