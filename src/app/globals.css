@@ -17,7 +17,7 @@
 }
 
 main {
-  padding: 4rem;
+  padding: 2rem 4rem;
 }
 
 .header-logo-group {
@@ -71,6 +71,7 @@ form {
 .closing-section {
   position: absolute;
   bottom: 0;
+  right: 0;
 }
 
 .total {
@@ -84,4 +85,62 @@ form {
 
 .final-price {
   margin: 0px 16px;
+}
+
+#name-input {
+  width: 84px;
+}
+
+form {
+  min-height: 5vh;
+}
+
+.checkout {
+  background: #D3D3D3;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.quantity-group label, .quantity-group input {
+  display: block;
+}
+
+#quantity-input {
+  height: 56px;
+}
+
+button:disabled,
+button[disabled] {
+  background-color: #cccccc;
+  color: #ffffff;
+}
+
+hr {
+  margin: 24px 0px;
+}
+
+.price {
+  min-width: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navigation {
+  margin-bottom: 48px;
+}
+
+.nav {
+  margin-right: 24px;
+}
+
+.transaction-summary {
+  padding: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  min-height: 400px;
+  border: 1px solid;
 }

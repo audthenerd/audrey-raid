@@ -7,11 +7,11 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 export default function Home() {
   const [productData, setData] = useState(null)
   const [productName, setProductName] = useState('Select product')
-  const [ productQty, setQuantity] = useState(null)
+  const [productQty, setQuantity] = useState(null)
   const [price, setPrice] = useState(null)
   const [itemsList, setList] = useState([])
   const [finalTotalPrice, setFinalPrice] = useState(0)
-
+  const [addButton, setStatus] = useState(true)
   useEffect(() => {
     fetch('/api/get-products')
       .then((res) => res.json())
@@ -25,10 +25,11 @@ export default function Home() {
     setProductName(name)
     e.target.value !== '' ? autoSetQuantity() : ''
     productData?.forEach((item) => {
-      if(item.name === name) {
+      if (item.name === name) {
         setPrice(item.price)
       }
     })
+    setAddButtonStatus()
   }
   const autoSetQuantity = () => {
     const quantityInput = document.getElementById('quantity-input')
@@ -46,18 +47,24 @@ export default function Home() {
     setProductName(null)
     setQuantity(null)
     setPrice(null)
+    setStatus(true)
   }
   const addItem = async (e) => {
     const itemTotalPrice = (Number(price) * Number(productQty)).toFixed(2)
     await setFinalPrice((Number(finalTotalPrice) + Number(itemTotalPrice)).toFixed(2))
-
-    const list = {'name': productName, 'quantity': productQty, 'price': itemTotalPrice}
+    const list = { 'name': productName, 'quantity': productQty, 'price': itemTotalPrice }
     await setList((itemsList) => [
       ...itemsList,
       list
     ])
 
     clearInputFields()
+  }
+  const setAddButtonStatus = () => {
+    const nameInput = document.getElementById('name-input')
+    console.log('value', nameInput.innerText)
+    nameInput.innerText === '' ? setStatus(true) : setStatus(false)
+    setStatus()
   }
   return (
     <main className="flex min-h-screen flex-col">
@@ -93,29 +100,38 @@ export default function Home() {
       <div className="form-section">
         <form>
           <div className="add-product-section">
-            <InputLabel id="product-input-label">Product</InputLabel>
-            <Select
-              labelId="product-input-label"
-              id="name-input"
-              value={productName}
-              label="Product"
-              onChange={handleNameData}
-            >
-              {
-                productData?.map((product, i) => {
-                  return (
-                    <MenuItem value={product.name} key={i}>{product.name}</MenuItem>
-                  )
-                })
-              }
-            </Select>
-            <label htmlFor="name" className="quantity">Quantity</label>
-            <input id="quantity-input" type="number" name="quantity" required onBlur={handleQuantityData} />
-            <div className="price">{price}</div>
-            <button onClick={addItem} type="button" >Add</button>
+            <div className="product-group">
+              <InputLabel id="product-input-label">Select Product</InputLabel>
+              <Select
+                labelId="product-input-label"
+                id="name-input"
+                value={productName}
+                label="Select Product"
+                placeholder="Select Product"
+                onChange={handleNameData}
+              >
+                {
+                  productData?.map((product, i) => {
+                    return (
+                      <MenuItem value={product.name} key={i}>{product.name}</MenuItem>
+                    )
+                  })
+                }
+              </Select>
+            </div>
+            <div className="quantity-group">
+              <label htmlFor="name" className="quantity">Quantity</label>
+              <input id="quantity-input" type="number" name="quantity" required onBlur={handleQuantityData} />
+            </div>
+            <div className="price"><span hidden={!price}>$</span>{price}</div>
+            <button onClick={addItem} type="button" disabled={addButton}>Add</button>
           </div>
+        </form>
+        <hr></hr>
+        <form action="/api/add-transaction">
           <div className="closing-section">
-            <button className="block" type="submit">Submit</button>
+              <input type="number" name="total" value={finalTotalPrice} hidden />
+            <button className="checkout" type="submit" disabled={!finalTotalPrice}>Checkout</button>
           </div>
         </form>
       </div>
