@@ -10,10 +10,13 @@ export default function Summary() {
     getTotalSpent()
   }, [])
 
-  const getTotalSpent = () => {
+  const getTotalSpent = async () => {
     const urlParams = new URLSearchParams(window.location.search)
-    console.log('params', urlParams.get('total'))
-    setTotalSpent(urlParams.get('total'))
+    await setTotalSpent(urlParams.get('total'))
+    removeSearchParams()
+  }
+  const removeSearchParams = () => {
+    window.history.replaceState({}, document.title, "/summary")
   }
   return (
     <main className="flex min-h-screen flex-col">

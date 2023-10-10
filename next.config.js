@@ -2,11 +2,6 @@
 const nextConfig = {
     async redirects() {
         return [
-            {
-                source: '/api/add-transaction',
-                destination: '/summary',
-                permanent: true,
-            },
         ]
     }
 }

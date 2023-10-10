@@ -9,6 +9,7 @@ export default function Home() {
   const [productName, setProductName] = useState('Select product')
   const [productQty, setQuantity] = useState(null)
   const [price, setPrice] = useState(null)
+  const [maxQuantity, setMaxQuantity] = useState(null)
   const [itemsList, setList] = useState([])
   const [finalTotalPrice, setFinalPrice] = useState(0)
   const [addButton, setStatus] = useState(true)
@@ -19,7 +20,7 @@ export default function Home() {
         setData(data.products.rows)
       })
   }, [])
-
+  console.log(productData)
   const handleNameData = (e) => {
     const name = e.target.value
     setProductName(name)
@@ -27,6 +28,7 @@ export default function Home() {
     productData?.forEach((item) => {
       if (item.name === name) {
         setPrice(item.price)
+        setMaxQuantity(item.quantity)
       }
     })
     setAddButtonStatus()
@@ -62,9 +64,12 @@ export default function Home() {
   }
   const setAddButtonStatus = () => {
     const nameInput = document.getElementById('name-input')
-    console.log('value', nameInput.innerText)
     nameInput.innerText === '' ? setStatus(true) : setStatus(false)
     setStatus()
+  }
+  const finalCheckout = () => {
+    const itemsListParam = encodeURIComponent(JSON.stringify(itemsList))
+    location.href = `/api/add-transaction?itemsList=${itemsListParam}&total=${finalTotalPrice}`
   }
   return (
     <main className="flex min-h-screen flex-col home">
@@ -112,28 +117,27 @@ export default function Home() {
               >
                 {
                   productData?.map((product, i) => {
-                    return (
-                      <MenuItem value={product.name} key={i}>{product.name}</MenuItem>
-                    )
+                    if(Number(product.quantity) > 0) {
+                      return (
+                        <MenuItem value={product.name} key={i}>{product.name}</MenuItem>
+                      )
+                    }
                   })
                 }
               </Select>
             </div>
             <div className="quantity-group">
               <label htmlFor="name" className="quantity">Quantity</label>
-              <input id="quantity-input" type="number" name="quantity" required onBlur={handleQuantityData} />
+              <input id="quantity-input" type="number" name="quantity" required onBlur={handleQuantityData} min="1" max={maxQuantity} />
             </div>
             <div className="price"><span hidden={!price}>$</span>{price}</div>
             <button className="add-to-cart" onClick={addItem} type="button" disabled={addButton}>Add to Cart</button>
           </div>
         </form>
         <hr></hr>
-        <form action="/api/add-transaction">
-          <div className="closing-section">
-              <input type="number" name="total" value={finalTotalPrice} hidden />
-            <button className="checkout" type="submit" disabled={!finalTotalPrice}>Checkout</button>
-          </div>
-        </form>
+        <div className="closing-section">
+          <button className="checkout" type="button" disabled={!finalTotalPrice} onClick={finalCheckout}>Checkout</button>
+        </div>
       </div>
     </main>
   )

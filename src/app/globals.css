@@ -77,8 +77,8 @@ form {
 
 .closing-section {
   position: absolute;
-  bottom: 0;
-  right: 0;
+  bottom: 2rem;
+  right: 4rem;
 }
 
 .total {
@@ -103,8 +103,8 @@ form {
 }
 
 .checkout {
-  background: #D3D3D3;
-  padding: 8px 16px;
+  background: #ff5733;
+  padding: 8px 32px;
   border-radius: 4px;
   font-weight: bold;
 }
@@ -118,9 +118,10 @@ form {
 
 #quantity-input {
   height: 56px;
-  border: 1px solid rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(0, 0, 0, 0.2);
   border-radius: 4px;
   padding-left: 8px;
+  width: 132px;
 }
 
 button:disabled,
@@ -151,6 +152,7 @@ hr {
 
 .nav {
   margin-right: 24px;
+  text-decoration: underline;
 }
 
 .transaction-summary {
@@ -167,8 +169,8 @@ hr {
   width: 120px;
   height: 64px;
   border-radius: 4px;
-  margin: auto 0px;
-  background-color: #afe1af;
+  margin: auto 0px 0px;
+  background-color: #0bda51;
   font-weight: bold;
   color: #ffffff;
 }
@@ -176,6 +178,7 @@ hr {
 .inventory .header {
   font-weight: bold;
   margin-bottom: 42px;
+  font-size: 24px;
 }
 
 table#inventory {
@@ -201,4 +204,23 @@ table#inventory {
   padding-bottom: 12px;
   background-color: #87cefa;
   color: white;
+  width: 320px;
+}
+
+.quantity-field {
+  display: flex;
+  justify-content: center;
+}
+
+.quantity-field div {
+  margin: 0px 24px;
+}
+
+.update-quantity {
+  width: 42px;
+}
+
+.edit {
+  background-color: #1976d2;
+  float: right;
 }
